@@ -28,8 +28,6 @@ func configureCi() (bool, *viper.Viper, error) {
 			if err != nil {
 				return isCi, nil, err
 			}
-		} else {
-			fmt.Println("  Using default CI config")
 		}
 	}
 

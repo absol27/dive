@@ -250,6 +250,21 @@ func (img *ImageArchive) ToImage() (*image.Image, error) {
 		}
 		layers = append(layers, dockerLayer.ToLayer())
 	}
+	for idx, layer := range layers {
+		fmt.Println(idx, layer)
+		fmt.Println("Layer Path: ", layer.Tree.Name)
+
+		err := layer.Tree.Root.VisitDepthParentFirst(func(node *filetree.FileNode) error {
+			if !node.Data.FileInfo.IsDir && node.Data.FileInfo.Linkname == "" {
+				fmt.Println(node.Path())
+			}
+			return nil
+		}, nil, nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println()
+	}
 
 	return &image.Image{
 		Trees:  trees,

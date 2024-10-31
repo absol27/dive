@@ -5,7 +5,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/dustin/go-humanize"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/afero"
 
@@ -34,8 +33,8 @@ func run(enableUi bool, options Options, imageResolver image.Resolver, events ev
 			return
 		}
 	} else {
-		events.message(utils.TitleFormat("Image Source: ") + options.Source.String() + "://" + options.Image)
-		events.message(utils.TitleFormat("Fetching image...") + " (this can take a while for large images)")
+		// events.message(utils.TitleFormat("Image Source: ") + options.Source.String() + "://" + options.Image)
+		// events.message(utils.TitleFormat("Fetching image...") + " (this can take a while for large images)")
 		img, err = imageResolver.Fetch(options.Image)
 		if err != nil {
 			events.exitWithErrorMessage("cannot fetch image", err)
@@ -43,7 +42,7 @@ func run(enableUi bool, options Options, imageResolver image.Resolver, events ev
 		}
 	}
 
-	events.message(utils.TitleFormat("Analyzing image..."))
+	// events.message(utils.TitleFormat("Analyzing image..."))
 	analysis, err := img.Analyze()
 	if err != nil {
 		events.exitWithErrorMessage("cannot analyze image", err)
@@ -73,9 +72,9 @@ func run(enableUi bool, options Options, imageResolver image.Resolver, events ev
 	}
 
 	if options.Ci {
-		events.message(fmt.Sprintf("  efficiency: %2.4f %%", analysis.Efficiency*100))
-		events.message(fmt.Sprintf("  wastedBytes: %d bytes (%s)", analysis.WastedBytes, humanize.Bytes(analysis.WastedBytes)))
-		events.message(fmt.Sprintf("  userWastedPercent: %2.4f %%", analysis.WastedUserPercent*100))
+		// events.message(fmt.Sprintf("  efficiency: %2.4f %%", analysis.Efficiency*100))
+		// events.message(fmt.Sprintf("  wastedBytes: %d bytes (%s)", analysis.WastedBytes, humanize.Bytes(analysis.WastedBytes)))
+		// events.message(fmt.Sprintf("  userWastedPercent: %2.4f %%", analysis.WastedUserPercent*100))
 
 		evaluator := ci.NewCiEvaluator(options.CiConfig)
 		pass := evaluator.Evaluate(analysis)
@@ -118,7 +117,7 @@ func run(enableUi bool, options Options, imageResolver image.Resolver, events ev
 }
 
 func Run(options Options) {
-	var exitCode int
+	// var exitCode int
 	var events = make(eventChannel)
 
 	imageResolver, err := dive.GetImageResolver(options.Source)
@@ -152,9 +151,10 @@ func Run(options Options) {
 			}
 		}
 
-		if event.errorOnExit {
-			exitCode = 1
-		}
+		// if event.errorOnExit {
+		// fmt.Println("error: exiting due to error", event.stderr)
+		// exitCode = 1
+		// }
 	}
-	os.Exit(exitCode)
+	// os.Exit(exitCode)
 }
